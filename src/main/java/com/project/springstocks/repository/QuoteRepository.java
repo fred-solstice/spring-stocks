@@ -11,6 +11,15 @@ import java.util.Date;
 
 public interface QuoteRepository extends JpaRepository<Quote, Integer> {
 
-    @Query("SELECT NEW com.project.springstocks.domain.AggregateData(MAX(price), MIN(price), SUM(volume)) FROM Quote q WHERE q.symbol = ?1 AND DATE(q.date) = ?2")
-    AggregateData findBySymbolAndDate(@Param("symbol") String symbol, @Param("date") Date date);
+    @Query("SELECT MAX(q.price) FROM Quote q WHERE q.symbol = :symbol AND DATE(q.date) = :date")
+    float getMaxPrice(@Param("symbol") String symbol, @Param("date") Date date);
+
+    @Query("SELECT MIN(q.price) FROM Quote q WHERE q.symbol = :symbol AND DATE(q.date) = :date")
+    float getMinPrice(@Param("symbol") String symbol, @Param("date") Date date);
+
+    @Query("SELECT SUM(q.volume) FROM Quote q WHERE q.symbol = :symbol AND DATE(q.date) = :date")
+    float getSumVolume(@Param("symbol") String symbol, @Param("date") Date date);
+
+    @Query(value = "SELECT price FROM quotes q WHERE q.symbol = :symbol AND DATE(q.date) = :date ORDER BY date DESC LIMIT 1", nativeQuery = true)
+    float getClosingPrice(@Param("symbol") String symbol, @Param("date") Date date);
 }

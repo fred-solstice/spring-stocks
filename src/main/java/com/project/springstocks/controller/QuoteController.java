@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.springstocks.domain.AggregateData;
 import com.project.springstocks.domain.Quote;
 import com.project.springstocks.repository.QuoteRepository;
+import com.project.springstocks.service.QuoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -22,30 +25,27 @@ import java.util.List;
 public class QuoteController {
 
     @Autowired
-    QuoteRepository quoteRepository;
+    QuoteService quoteService;
 
     @PostMapping(path = "/load", consumes = "application/json")
     public void insertQuotes() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        File json = new File("/Users/freddymarquez/Code/spring-stocks/src/main/resources/stocks.json");
-        List<Quote> quotes = mapper.readValue(json, new TypeReference<List<Quote>>() {
-        });
-
-        if (quoteRepository.count() == 0) {
-            quoteRepository.saveAll(quotes);
-
-        } else {
-            quoteRepository.deleteAllInBatch();
-            quoteRepository.saveAll(quotes);
-        }
+        quoteService.saveAll();
     }
 
     @GetMapping("/{symbol}/{date}")
-    public AggregateData getAggregatedDataForSymbolOnDate(@PathVariable(value = "symbol") String symbol,
-                                                          @PathVariable(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+    public AggregateData getDataForSymbolOnDate(@PathVariable(value = "symbol") String symbol,
+                                       @PathVariable(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
 
-        return quoteRepository.findBySymbolAndDate(symbol, date);
+        float max = quoteService.getMax(symbol, date);
+        float min = quoteService.getMin(symbol, date);
+        float sum = quoteService.getSumVol(symbol, date);
+        float close = quoteService.getClosing(symbol, date);
 
+        List<Float> data = Arrays.asList(max, min, sum, close);
+
+        AggregateData daily = new AggregateData(max, min, sum, close);
+
+        return daily;
     }
 
 }
