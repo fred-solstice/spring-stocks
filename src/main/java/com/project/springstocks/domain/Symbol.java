@@ -11,6 +11,8 @@ public class Symbol {
         this.symbol = symbol;
     }
 
+    public Symbol(){}
+
     public String getSymbol() {
         return symbol;
     }
