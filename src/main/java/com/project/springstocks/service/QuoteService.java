@@ -2,7 +2,6 @@ package com.project.springstocks.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.springstocks.domain.AggregateData;
 import com.project.springstocks.domain.Quote;
 import com.project.springstocks.repository.QuoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,7 @@ public class QuoteService {
     public void saveAll() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         File json = new File("/Users/freddymarquez/Code/spring-stocks/src/main/resources/stocks.json");
-        List<Quote> quotes = mapper.readValue(json, new TypeReference<List<Quote>>() {
-        });
+        List<Quote> quotes = mapper.readValue(json, new TypeReference<List<Quote>>(){});
 
         if (quoteRepository.count() == 0) { quoteRepository.saveAll(quotes); }
     }
@@ -49,6 +47,21 @@ public class QuoteService {
     public float getClosing(String symbol, Date date) {
         float close = quoteRepository.getClosingPrice(symbol, date);
         return close;
+    }
+
+    public float getMonthMax(String symbol, int month) {
+        float summary = quoteRepository.getMonthlyMax(symbol, month);
+        return summary;
+    }
+
+    public float getMonthMin(String symbol, int month) {
+        float summary = quoteRepository.getMonthlyMin(symbol, month);
+        return summary;
+    }
+
+    public float getMonthVol(String symbol, int month) {
+        float summary = quoteRepository.getMonthlyVolume(symbol, month);
+        return summary;
     }
 
 }
