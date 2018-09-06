@@ -3,6 +3,7 @@ package com.project.springstocks.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.springstocks.domain.Quote;
+import com.project.springstocks.domain.Symbol;
 import com.project.springstocks.repository.QuoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,40 +28,40 @@ public class QuoteService {
         if (quoteRepository.count() == 0) { quoteRepository.saveAll(quotes); }
     }
 
-    public float getMax(String symbol, Date date) {
+    public float getMax(Symbol symbol, Date date) {
         float max = quoteRepository.getMaxPrice(symbol, date);
         return max;
 
     }
 
-    public float getMin(String symbol, Date date) {
+    public float getMin(Symbol symbol, Date date) {
         float min = quoteRepository.getMinPrice(symbol, date);
         return min;
 
     }
 
-    public float getSumVol(String symbol, Date date) {
+    public float getSumVol(Symbol symbol, Date date) {
         float sum = quoteRepository.getSumVolume(symbol, date);
         return sum;
 
     }
 
-    public float getClosing(String symbol, Date date) {
+    public float getClosing(Symbol symbol, Date date) {
         float close = quoteRepository.getClosingPrice(symbol, date);
         return close;
     }
 
-    public float getMonthMax(String symbol, int month) {
+    public float getMonthMax(Symbol symbol, int month) {
         float summary = quoteRepository.getMonthlyMax(symbol, month);
         return summary;
     }
 
-    public float getMonthMin(String symbol, int month) {
+    public float getMonthMin(Symbol symbol, int month) {
         float summary = quoteRepository.getMonthlyMin(symbol, month);
         return summary;
     }
 
-    public float getMonthVol(String symbol, int month) {
+    public float getMonthVol(Symbol symbol, int month) {
         float summary = quoteRepository.getMonthlyVolume(symbol, month);
         return summary;
     }

@@ -12,7 +12,8 @@ public class Quote {
     private Integer id;
 
     @Column
-    private String symbol;
+    @Embedded
+    private Symbol symbol;
 
     @Column
     private Float price;
@@ -24,7 +25,7 @@ public class Quote {
     @Column
     private Date date;
 
-    public Quote(String symbol, Float price, int volume, Date date) {
+    public Quote(Symbol symbol, Float price, int volume, Date date) {
         this.symbol = symbol;
         this.price = price;
         this.volume = volume;
@@ -37,9 +38,9 @@ public class Quote {
 
     public void setId(Integer id) { this.id = id; }
 
-    public String getSymbol() { return symbol; }
+    public Symbol getSymbol() { return symbol; }
 
-    public void setSymbol(String symbol) { this.symbol = symbol; }
+    public void setSymbol(Symbol symbol) { this.symbol = symbol; }
 
     public Float getPrice() { return price; }
 

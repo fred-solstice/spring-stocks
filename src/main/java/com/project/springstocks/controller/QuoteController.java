@@ -1,6 +1,7 @@
 package com.project.springstocks.controller;
 
 import com.project.springstocks.domain.AggregateData;
+import com.project.springstocks.domain.Symbol;
 import com.project.springstocks.service.QuoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,7 +26,7 @@ public class QuoteController {
     }
 
     @GetMapping("/{symbol}/{date}")
-    public AggregateData getDataForSymbolOnDate(@PathVariable(value = "symbol") String symbol,
+    public AggregateData getDataForSymbolOnDate(@PathVariable(value = "symbol") Symbol symbol,
                                                 @PathVariable(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
 
         float max   = quoteService.getMax(symbol, date);
@@ -38,8 +39,8 @@ public class QuoteController {
     }
 
     @GetMapping("/{symbol}/month/{month}")
-    public AggregateData getDataForSymbolOnMonth(@PathVariable(value = "symbol") String symbol,
-                                        @PathVariable(value = "month")  int month) {
+    public AggregateData getDataForSymbolOnMonth(@PathVariable(value = "symbol") Symbol symbol,
+                                                 @PathVariable(value = "month")  int month) {
 
         float month_min = quoteService.getMonthMin(symbol, month);
         float month_max = quoteService.getMonthMax(symbol, month);
