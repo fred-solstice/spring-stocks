@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class QuoteService {
 
     public void saveAll() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        File json = new File("/Users/freddymarquez/Code/spring-stocks/src/main/resources/stocks.json");
+        URL json = new URL("https://bootcamp-training-files.cfapps.io/week2/week2-stocks.json");
         List<Quote> quotes = mapper.readValue(json, new TypeReference<List<Quote>>(){});
 
         if (quoteRepository.count() == 0) { quoteRepository.saveAll(quotes); }
